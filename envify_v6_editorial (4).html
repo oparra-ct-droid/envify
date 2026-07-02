@@ -1,0 +1,890 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700;1,900&family=Roboto:wght@300;400;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--g:#1ED760;--bg:#050805;--s1:rgba(30,215,96,0.08);--s2:rgba(30,215,96,0.04);--sb:rgba(30,215,96,0.18);--w:#fff;--gy:rgba(255,255,255,0.45);--gy2:rgba(255,255,255,0.2);}
+#er{font-family:'Inter',sans-serif;background:var(--bg);color:var(--w);width:100%;overflow:hidden;}
+.screen{display:none;min-height:100vh;width:100%;flex-direction:column;align-items:stretch;position:relative;}
+.screen.active{display:flex;}
+.bg-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+.orb{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(30,215,96,0.2) 0%,transparent 70%);pointer-events:none;}
+.oa{width:700px;height:700px;top:-250px;right:-200px;}
+.ob{width:500px;height:500px;bottom:-150px;left:-150px;}
+.oc{width:300px;height:300px;top:30%;left:5%;opacity:0.4;}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(30,215,96,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(30,215,96,0.03) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+
+.topbar{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;align-items:center;gap:12px;
+  padding:0 24px;height:56px;
+  background:rgba(5,8,5,0.7);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(30,215,96,0.1);
+  z-index:30;
+}
+.sp-logo{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;letter-spacing:-0.3px;text-decoration:none;}
+.sp-dot{width:26px;height:26px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;}
+.sp-dot svg{width:15px;height:15px;}
+.back-btn{
+  background:transparent;border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.6);font-size:10px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 14px;border-radius:4px;cursor:pointer;
+  transition:all 0.15s;display:none;font-family:'Inter',sans-serif;
+}
+.back-btn.show{display:block;}
+.back-btn:hover{border-color:var(--g);color:var(--g);}
+.pb{margin-left:auto;font-size:9px;font-weight:900;letter-spacing:3px;color:var(--g);border:1px solid rgba(30,215,96,0.3);padding:4px 10px;border-radius:2px;}
+
+.cta{
+  background:var(--g);color:#000;font-size:11px;font-weight:900;
+  letter-spacing:3px;text-transform:uppercase;border:none;
+  cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;
+  display:inline-block;
+}
+.cta:hover{background:#22f06b;transform:translateY(-1px);}
+.cta-outline{
+  background:transparent;color:var(--w);font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;
+}
+.cta-outline:hover{border-color:var(--w);background:rgba(255,255,255,0.04);}
+
+.glass{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.glass-g{background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+
+.s-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:stretch;flex:1;padding:72px 0 0;}
+
+.eyebrow{font-size:9px;font-weight:900;letter-spacing:5px;color:var(--g);text-transform:uppercase;}
+.tag{display:inline-block;font-size:9px;font-weight:900;letter-spacing:3px;color:var(--g);border:1px solid rgba(30,215,96,0.3);padding:4px 10px;border-radius:2px;text-transform:uppercase;}
+
+.ldr{width:48px;height:48px;border:2px solid rgba(30,215,96,0.2);border-top:2px solid var(--g);border-radius:50%;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.wave-c{display:flex;align-items:center;gap:2px;}
+.wb{width:3px;background:var(--g);border-radius:1px;animation:wv 0.8s ease-in-out infinite;}
+@keyframes wv{0%,100%{transform:scaleY(1);}50%{transform:scaleY(2.8);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.fu{animation:fadeUp 0.5s ease forwards;}
+
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:440px;}
+.opt{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  padding:18px 14px;cursor:pointer;transition:all 0.15s;
+  text-align:center;font-size:13px;font-weight:700;
+  color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;
+}
+.opt:hover,.opt.sel{border-color:var(--g);background:rgba(30,215,96,0.07);color:var(--g);}
+.opt-icon{font-size:20px;margin-bottom:8px;display:block;}
+
+.stat-bar-bg{flex:1;height:4px;background:rgba(255,255,255,0.07);}
+.stat-bar{height:100%;background:var(--g);transition:width 1.4s cubic-bezier(0.4,0,0.2,1);}
+
+.track{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.track-art{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(30,215,96,0.08);border:1px solid rgba(30,215,96,0.1);}
+.play-btn{width:36px;height:36px;border-radius:50%;background:var(--g);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.play-btn:hover{transform:scale(1.06);}
+
+.chat-msgs{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:170px;max-height:250px;overflow-y:auto;}
+.chat-msgs::-webkit-scrollbar{width:2px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:rgba(30,215,96,0.3);}
+.msg{max-width:82%;padding:10px 14px;font-size:13px;line-height:1.5;}
+.msg.them{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.07);color:#fff;border-radius:2px 14px 14px 14px;align-self:flex-start;}
+.msg.me{background:var(--g);color:#000;font-weight:700;border-radius:14px 14px 2px 14px;align-self:flex-end;}
+.mod-alert{margin:0 14px 12px;background:rgba(255,100,0,0.07);border:1px solid rgba(255,130,0,0.25);padding:14px 16px;font-size:12px;color:#ffaa44;line-height:1.6;display:none;border-radius:0;}
+.mod-alert.show{display:block;}
+.mod-alert strong{color:#ffcc66;font-weight:900;letter-spacing:0.5px;}
+.chat-inp{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0;padding:10px 16px;color:#fff;font-size:13px;font-family:'Inter',sans-serif;outline:none;}
+.chat-inp::placeholder{color:rgba(255,255,255,0.25);}
+.chat-inp:focus{border-color:rgba(30,215,96,0.4);}
+.send-btn{width:40px;height:40px;background:var(--g);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.send-btn:hover{transform:scale(1.05);}
+
+.badge-ring{width:110px;height:110px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 16px;background:rgba(30,215,96,0.05);animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(30,215,96,0.25);}50%{box-shadow:0 0 0 18px rgba(30,215,96,0);}}
+
+.fc-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+.fc{position:absolute;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:10px 14px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.fc.a{top:18%;left:2%;animation:fl 9s ease-in-out infinite;}
+.fc.b{top:20%;right:2%;animation:fl 9s ease-in-out infinite 2s;}
+.fc.c{bottom:20%;left:2%;animation:fl 9s ease-in-out infinite 4.5s;}
+.fc.d{bottom:16%;right:2%;animation:fl 9s ease-in-out infinite 1s;}
+@keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.fc-cov{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.15);flex-shrink:0;}
+.fc-t{font-weight:700;color:#fff;font-size:11px;}
+.fc-s{color:var(--gy);font-size:10px;}
+
+.conf-ta{width:100%;min-height:120px;background:transparent;border:none;outline:none;color:#fff;font-size:15px;line-height:1.6;font-family:'Inter',sans-serif;padding:20px;resize:none;}
+.conf-ta::placeholder{color:rgba(255,255,255,0.2);font-style:italic;}
+.ans-ta{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:0;padding:14px 16px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;resize:none;min-height:80px;}
+.ans-ta::placeholder{color:rgba(255,255,255,0.25);}
+.ans-ta:focus{border-color:rgba(30,215,96,0.35);}
+
+@media(max-width:600px){.oa,.ob{width:400px;height:400px;}.fc.a,.fc.b,.fc.c,.fc.d{display:none;}.hb-t{font-size:clamp(42px,14vw,72px)!important;letter-spacing:-3px!important;}}
+</style>
+
+<div id="er">
+
+<div class="screen active" id="s1">
+  <!-- FONDO: fondo_banner.png | FOTO: chica.png | LOGO: LOGO_ENVIFY.png -->
+  <!-- Coloca los 3 archivos en la misma carpeta que este HTML -->
+
+  <!-- Capa fondo -->
+  <div style="position:absolute;inset:0;z-index:0;background-image:url('fondo_banner.png');background-size:cover;background-position:center;"></div>
+  <!-- Overlay degradado -->
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(0,0,0,0.93) 0%,rgba(0,0,0,0.7) 48%,rgba(0,0,0,0.05) 100%);"></div>
+  <!-- Foto chica derecha -->
+  <div style="position:absolute;right:0;top:0;bottom:0;width:50%;z-index:2;overflow:hidden;">
+    <img src="chica.png" style="width:100%;height:100%;object-fit:cover;object-position:center top;mix-blend-mode:multiply;" />
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,#000 0%,transparent 35%);pointer-events:none;"></div>
+  </div>
+
+  <!-- Contenido principal: usa position:relative para quedar sobre las capas -->
+  <div style="position:relative;z-index:3;display:flex;flex-direction:column;min-height:100vh;padding:28px 36px 32px 72px;box-sizing:border-box;font-family:'Roboto',sans-serif;">
+
+    <!-- Topbar -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;margin-left:clamp(0px,4vw,60px);">
+      <img src="LOGO_ENVIFY.png" alt="ENVIFY" style="height:clamp(70px,14vh,160px);width:auto;mix-blend-mode:screen;" />
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.6);border:1px solid rgba(30,215,96,0.35);padding:8px 14px;border-radius:50px;margin-top:6px;">
+        <div style="width:26px;height:26px;border-radius:50%;background:#1ED760;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg>
+        </div>
+        <span style="font-size:13px;font-weight:700;color:#fff;">Spotify</span>
+      </div>
+    </div>
+
+    <!-- Zona de texto centrada -->
+    <div style="flex:1;display:flex;align-items:center;max-width:520px;margin-left:clamp(0px,4vw,60px);">
+      <div style="width:100%;">
+
+        <div style="font-size:clamp(36px,6.5vw,80px);font-weight:900;line-height:0.95;letter-spacing:-1px;color:#fff;margin-bottom:6px;">
+          Porque la <span style="color:#1ED760;">envidia</span>
+        </div>
+        <div style="font-size:clamp(18px,3.5vw,44px);font-weight:300;color:rgba(255,255,255,0.75);letter-spacing:0px;margin-bottom:clamp(16px,3vh,24px);">
+          merece una playlist
+        </div>
+
+        <div style="width:48px;height:2px;background:#1ED760;margin-bottom:clamp(12px,2.5vh,20px);"></div>
+
+        <div style="margin-bottom:clamp(16px,3vh,28px);max-width:420px;">
+          <p style="font-size:clamp(11px,1.2vw,13px);color:rgba(255,255,255,0.6);line-height:1.75;">En ENVIFY puedes confesar aquello que te genera envidia. Nuestra IA te escucha, te hace algunas preguntas y convierte tu confesión en una playlist personalizada, una canción para dedicar y hasta una conversación que puede transformar la incomodidad en conexión.</p>
+          <p style="font-size:clamp(11px,1.2vw,13px);font-weight:700;color:#1ED760;margin-top:10px;">Cuéntanos qué te da envidia. Nosotros ponemos la música.</p>
+        </div>
+
+        <!-- BOTÓN COMENZAR -->
+        <button onclick="go(2)" style="display:inline-flex;align-items:center;gap:10px;background:#1ED760;color:#000;border:none;cursor:pointer;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;font-family:'Roboto',sans-serif;padding:15px 30px;border-radius:50px;box-shadow:0 0 28px rgba(30,215,96,0.4);">
+          <span style="width:20px;height:20px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="#1ED760"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg>
+          </span>
+          COMENZAR
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s2">
+  <div class="bg-noise"></div><div class="orb ob"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(1)">← Atrás</button>
+    <span class="pb">ENVIFY</span>
+  </div>
+  <div class="s-inner" style="justify-content:center;padding:80px 32px 40px;">
+    <div style="max-width:520px;margin:0 auto;width:100%;">
+      <div class="eyebrow" style="margin-bottom:10px;">Tu confesión</div>
+      <h1 style="font-size:clamp(36px,8vw,64px);font-weight:900;line-height:0.9;letter-spacing:-3px;text-transform:uppercase;margin-bottom:6px;">¿Qué te<br>da <span style="color:var(--g);font-style:italic;">envidia?</span></h1>
+      <p style="font-size:13px;color:var(--gy);margin-bottom:24px;line-height:1.5;">No te hagas el interesante. Escríbelo sin filtro,<br>la IA ya está lista para juzgarte con cariño.</p>
+      <div style="border:1px solid rgba(30,215,96,0.2);background:rgba(30,215,96,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+        <textarea class="conf-ta" id="confession" placeholder="Ej: Envidio a mi amiga porque tiene todo lo que yo quiero y ella ni cuenta se da..."></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-top:1px solid rgba(30,215,96,0.1);background:rgba(30,215,96,0.02);">
+          <span style="font-size:10px;color:var(--gy);" id="cc">0 / 280</span>
+          <button class="cta" style="padding:12px 24px;" onclick="go('load')">ANALIZA MI ENVIDIA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="sload">
+  <div class="bg-noise"></div><div class="orb oc"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+  </div>
+  <div class="s-inner" style="justify-content:center;align-items:center;text-align:center;padding:80px 32px 40px;">
+    <div class="eyebrow" style="margin-bottom:16px;">ENVIFY IA</div>
+    <h1 style="font-size:clamp(32px,7vw,56px);font-weight:900;line-height:0.9;letter-spacing:-2px;text-transform:uppercase;margin-bottom:28px;">Analizando<br>tu <span style="color:var(--g);font-style:italic;">envidia</span></h1>
+    <div class="ldr" style="margin:0 auto 20px;"></div>
+    <p style="font-size:13px;color:var(--gy);">Procesando tu confesión...</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:8px;">Identificando lo ridícula que suena</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.15);margin-top:4px;">Buscando la playlist perfecta para tu drama</p>
+  </div>
+</div>
+
+<div class="screen" id="s3">
+  <div class="bg-noise"></div><div class="orb oa" style="opacity:0.12;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(2)">← Atrás</button>
+    <span class="pb">ENVIFY</span>
+  </div>
+  <div class="s-inner" style="justify-content:center;padding:80px 32px 40px;">
+    <div style="max-width:520px;margin:0 auto;width:100%;">
+      <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(30,215,96,0.25);padding:6px 14px;margin-bottom:20px;background:rgba(30,215,96,0.05);">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--g);display:inline-block;animation:pulse 2s ease-in-out infinite;"></span>
+        <span style="font-size:9px;font-weight:900;letter-spacing:3px;color:var(--g);text-transform:uppercase;">ENVIFY IA · EN VIVO</span>
+      </div>
+      <div style="border-left:2px solid var(--g);padding:20px 24px;background:rgba(30,215,96,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);margin-bottom:20px;">
+        <p style="font-size:13px;color:var(--gy);margin-bottom:10px;">Ok, ya leí tu historia. Spoiler: eres completamente normal.</p>
+        <p style="font-size:20px;font-weight:900;line-height:1.2;letter-spacing:-0.5px;color:#fff;">Imagina que esa persona está frente a ti.</p>
+        <p style="font-size:14px;color:var(--gy);margin-top:8px;line-height:1.5;">¿Qué le dirías? Sé honesto/a. Aquí la IA te escucha y no te va a delatar.</p>
+      </div>
+      <textarea class="ans-ta" id="s3answer" placeholder="Escribe lo que nunca te animaste a decirle..." rows="4"></textarea>
+      <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+        <button class="cta" style="padding:14px 28px;" onclick="go(4)">CONTINUAR →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s4">
+  <div class="bg-noise"></div><div class="orb ob" style="opacity:0.15;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(3)">← Atrás</button>
+    <span class="pb">ENVIFY</span>
+  </div>
+  <div class="s-inner" style="justify-content:center;padding:80px 32px 40px;align-items:center;">
+    <div style="max-width:480px;width:100%;">
+      <div style="border-left:2px solid var(--g);padding:16px 20px;background:rgba(30,215,96,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);margin-bottom:20px;">
+        <p style="font-size:12px;color:var(--gy);margin-bottom:6px;">Gracias por compartirlo. Eso fue más revelador de lo que crees.</p>
+        <p style="font-size:18px;font-weight:900;letter-spacing:-0.5px;color:#fff;">¿Qué exactamente quieres que esa persona tenga menos?</p>
+        <p style="font-size:12px;color:var(--gy);margin-top:6px;">Seamos honestos. Elige lo que más te duele (sin anestesia).</p>
+      </div>
+      <div class="opt-grid">
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">🏆</span>Su éxito</div>
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">💪</span>Su confianza</div>
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">❤️</span>Su relación</div>
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">✨</span>Su estilo de vida</div>
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">⭐</span>Su reconocimiento</div>
+        <div class="opt" onclick="selOpt(this)"><span class="opt-icon">🎯</span>Todo lo anterior</div>
+      </div>
+      <div style="margin-top:18px;text-align:right;">
+        <button class="cta" style="padding:14px 28px;" onclick="go(5)">CONTINUAR →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s5">
+  <div class="bg-noise"></div><div class="orb oa" style="opacity:0.1;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(4)">← Atrás</button>
+    <span class="pb">ANÁLISIS</span>
+  </div>
+  <div class="s-inner" style="justify-content:center;padding:80px 32px 40px;">
+    <div style="max-width:500px;margin:0 auto;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px;">Análisis ENVIFY</div>
+          <h2 style="font-size:clamp(24px,5vw,36px);font-weight:900;line-height:0.95;letter-spacing:-1.5px;color:#fff;">Lo que encontramos<br>detrás de <span style="color:var(--g);font-style:italic;">tu envidia</span></h2>
+        </div>
+        <div id="s5BigPct" style="font-size:48px;font-weight:900;color:rgba(30,215,96,0.15);letter-spacing:-4px;font-style:italic;">—</div>
+      </div>
+
+      <!-- s5 loader IA -->
+      <div id="s5Loading" style="text-align:center;padding:20px 0;">
+        <div class="ldr" style="width:32px;height:32px;border-width:2px;margin:0 auto 10px;"></div>
+        <p style="font-size:12px;color:var(--gy);">Analizando tu envidia...</p>
+      </div>
+      <div id="s5Content" style="display:none;width:100%;">
+      <div style="border:1px solid rgba(30,215,96,0.15);background:rgba(30,215,96,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:24px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span id="s5L1" style="font-size:11px;color:var(--gy);min-width:88px;font-weight:600;">Admiración</span>
+          <div class="stat-bar-bg" style="flex:1;"><div class="stat-bar" id="b1" style="width:0%"></div></div>
+          <span id="s5P1" style="font-size:12px;font-weight:900;color:#fff;min-width:30px;text-align:right;">—</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <span id="s5L2" style="font-size:11px;color:var(--gy);min-width:88px;font-weight:600;">Inseguridad</span>
+          <div class="stat-bar-bg" style="flex:1;"><div class="stat-bar" id="b2" style="width:0%"></div></div>
+          <span id="s5P2" style="font-size:12px;font-weight:900;color:#fff;min-width:30px;text-align:right;">—</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <span id="s5L3" style="font-size:11px;color:var(--gy);min-width:88px;font-weight:600;">Frustración</span>
+          <div class="stat-bar-bg" style="flex:1;"><div class="stat-bar" id="b3" style="width:0%"></div></div>
+          <span id="s5P3" style="font-size:12px;font-weight:900;color:#fff;min-width:30px;text-align:right;">—</span>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:18px;">
+          <p style="font-size:9px;font-weight:900;letter-spacing:3px;color:var(--g);text-transform:uppercase;margin-bottom:8px;">ENVIFY dice:</p>
+          <p id="s5Quote" style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;font-style:italic;">...</p>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--g);margin-top:16px;font-weight:700;letter-spacing:2px;text-align:center;">♫ ARMANDO TU PLAYLIST DE CATARSIS...</p>
+      </div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="cta" style="padding:16px 36px;" onclick="go(6)">VER MI PLAYLIST →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s6">
+  <div class="bg-noise"></div><div class="orb ob" style="opacity:0.15;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(5)">← Atrás</button>
+    <span class="pb">PLAYLIST</span>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:480px;width:100%;display:flex;flex-direction:column;align-items:center;">
+      <div class="eyebrow" style="margin-bottom:12px;text-align:center;">Playlist generada</div>
+      <div style="width:150px;height:150px;background:rgba(30,215,96,0.08);border:1px solid rgba(30,215,96,0.2);display:flex;align-items:center;justify-content:center;font-size:54px;margin-bottom:16px;">💚</div>
+      <h3 style="font-size:24px;font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:4px;">Verde de Envidia</h3>
+      <p style="font-size:12px;color:var(--gy);text-align:center;margin-bottom:20px;max-width:300px;">Curada por ENVIFY para que proceses tu drama con estilo</p>
+      <div id="s6StaticTracks" style="width:100%;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);"></div>
+      <div style="width:100%;background:rgba(30,215,96,0.06);border:1px solid rgba(30,215,96,0.15);border-top:none;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <button class="play-btn" id="s6PlayBtn" onclick="s6TogglePlay()" aria-label="Reproducir">
+          <svg id="s6PlayIco" width="15" height="15" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="s6PauseIco" width="15" height="15" viewBox="0 0 24 24" fill="black" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="wave-c" id="s6Wave"><div class="wb" style="height:7px;animation-delay:0s;"></div><div class="wb" style="height:13px;animation-delay:0.1s;"></div><div class="wb" style="height:9px;animation-delay:0.2s;"></div><div class="wb" style="height:17px;animation-delay:0.3s;"></div><div class="wb" style="height:11px;animation-delay:0.4s;"></div><div class="wb" style="height:7px;animation-delay:0.5s;"></div><div class="wb" style="height:15px;animation-delay:0.6s;"></div></div>
+        <div id="s6TrackInfo" style="flex:1;margin-left:8px;display:none;"><div id="s6TrackName" style="font-size:11px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;"></div><div style="width:100%;height:2px;background:rgba(255,255,255,0.1);margin-top:4px;"><div id="s6Prog" style="width:0%;height:100%;background:var(--g);transition:width 0.5s;"></div></div></div>
+        <span style="font-size:11px;color:var(--gy);margin-left:auto;font-weight:600;">+21 canciones</span>
+      </div>
+      <iframe id="s6Frame" width="1" height="1" frameborder="0" allow="autoplay" style="position:fixed;bottom:-100px;opacity:0;pointer-events:none;" src="about:blank"></iframe>
+      <div id="s6Loading" style="display:none;text-align:center;padding:12px;"><div class="ldr" style="width:28px;height:28px;border-width:2px;margin:0 auto 8px;"></div><p style="font-size:11px;color:var(--gy);">Generando con IA...</p></div>
+      <div id="s6TrackList" style="width:100%;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.02);margin-bottom:4px;display:none;"></div>
+      <button class="cta" style="padding:16px 36px;margin-top:12px;" onclick="go(7)">VER TU CANCIÓN →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s7">
+  <div class="bg-noise"></div><div class="orb oa" style="opacity:0.12;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(6)">← Atrás</button>
+    <span class="pb">SOUNDTRACK</span>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:460px;width:100%;display:flex;flex-direction:column;align-items:center;">
+      <div class="eyebrow" style="margin-bottom:12px;text-align:center;">Tu soundtrack</div>
+      <h2 style="font-size:clamp(26px,5vw,40px);font-weight:900;line-height:0.9;letter-spacing:-2px;text-align:center;margin-bottom:20px;">Tu emoción ya<br><span style="color:var(--g);font-style:italic;">tiene canción.</span></h2>
+      <div style="width:170px;height:170px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:18px;">🎭</div>
+      <p style="font-size:22px;font-weight:900;text-align:center;margin-bottom:4px;letter-spacing:-0.5px;">Devuélveme a mi chica</p>
+      <p style="font-size:13px;color:var(--gy);text-align:center;margin-bottom:16px;">Hombres G</p>
+      <div style="border-left:2px solid var(--g);padding:12px 18px;background:rgba(30,215,96,0.04);max-width:380px;text-align:center;margin-bottom:20px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
+        <p style="font-size:14px;font-style:italic;color:rgba(255,255,255,0.75);line-height:1.6;">Porque a veces la envidia es solo el nombre bonito que le ponemos al amor que no supimos pedir.</p>
+      </div>
+      <div style="width:100%;max-width:380px;background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.15);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <button class="play-btn" id="s7PlayBtn" onclick="window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190','_blank')" aria-label="Reproducir en Spotify">
+          <svg id="s7PlayIco" width="15" height="15" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="s7PauseIco" width="15" height="15" viewBox="0 0 24 24" fill="black" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div style="flex:1;"><div id="s7TrackLabel" style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px;">Devuélveme a mi chica · Hombres G</div><div style="width:100%;height:2px;background:rgba(255,255,255,0.1);"><div id="s7Prog" style="width:0%;height:100%;background:var(--g);transition:width 0.5s;"></div></div></div>
+        <span id="s7Dur" style="font-size:11px;color:var(--gy);">3:42</span>
+      </div>
+      <iframe id="s7Frame" width="1" height="1" frameborder="0" allow="autoplay" style="position:fixed;bottom:-100px;opacity:0;pointer-events:none;" src="about:blank"></iframe>
+      <button class="cta" style="padding:16px 36px;" onclick="go(8)">COMPARTIRLA →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s8">
+  <div class="bg-noise"></div><div class="orb ob" style="opacity:0.12;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(7)">← Atrás</button>
+    <span class="pb">COMPARTIR</span>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:460px;width:100%;">
+      <div class="eyebrow" style="margin-bottom:10px;text-align:center;">Compartir</div>
+      <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;line-height:0.9;letter-spacing:-2px;text-align:center;margin-bottom:6px;">Algunas emociones<br><span style="color:var(--g);font-style:italic;">merecen ser dichas.</span></h2>
+      <p style="font-size:13px;color:var(--gy);text-align:center;margin-bottom:24px;">O al menos musicalizadas. Tú decides.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div onclick="go(9)" style="border:1px solid rgba(255,255,255,0.08);padding:18px 20px;cursor:pointer;transition:all 0.15s;display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+          <div style="width:42px;height:42px;background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎭</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;">Compartir de forma anónima</div><div style="font-size:12px;color:var(--gy);line-height:1.4;">Drama total, cero consecuencias. Tu nombre no aparece.</div></div>
+        </div>
+        <div onclick="go(9)" style="border:1px solid rgba(255,255,255,0.08);padding:18px 20px;cursor:pointer;transition:all 0.15s;display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+          <div style="width:42px;height:42px;background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">👤</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;">Compartir desde mi perfil</div><div style="font-size:12px;color:var(--gy);line-height:1.4;">Para los valientes. O los que ya no tienen nada que perder.</div></div>
+        </div>
+        <div onclick="go(11)" style="border:1px solid rgba(255,255,255,0.08);padding:18px 20px;cursor:pointer;transition:all 0.15s;display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+          <div style="width:42px;height:42px;background:rgba(30,215,96,0.1);border:1px solid rgba(30,215,96,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📚</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;">Guardar para mí</div><div style="font-size:12px;color:var(--gy);line-height:1.4;">A veces el drama es personal. Nadie tiene que saber.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s9">
+  <div class="bg-noise"></div><div class="orb oc" style="opacity:0.1;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(8)">← Atrás</button>
+    <span style="font-size:10px;font-weight:900;letter-spacing:2px;color:var(--g);margin-left:auto;">ENVIADO</span>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:460px;width:100%;">
+      <div class="eyebrow" style="margin-bottom:10px;text-align:center;">Entrega</div>
+      <h2 style="font-size:clamp(26px,5vw,40px);font-weight:900;line-height:0.9;letter-spacing:-1.5px;text-align:center;margin-bottom:20px;">Alguien tiene<br><span style="color:var(--g);font-style:italic;">un mensaje para ti.</span></h2>
+      <div style="border:1px solid rgba(30,215,96,0.15);background:rgba(30,215,96,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;">
+        <div style="padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:9px;color:var(--gy);font-weight:900;letter-spacing:2.5px;text-transform:uppercase;background:rgba(30,215,96,0.04);">Bandeja de entrada · ENVIFY</div>
+        <div style="padding:16px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="width:46px;height:46px;border-radius:50%;background:rgba(30,215,96,0.12);border:1px solid rgba(30,215,96,0.25);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💌</div>
+          <div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;">Alguien que te admira (o algo así)</div><div style="font-size:12px;color:var(--gy);">Te mandó una canción. Escúchala antes de reaccionar impulsivamente.</div></div>
+        </div>
+        <div style="padding:0 18px 14px;">
+          <div style="background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.12);padding:12px;display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;background:rgba(30,215,96,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🎭</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Devuélveme a mi chica</div><div style="font-size:11px;color:var(--gy);">Hombres G · via ENVIFY</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;padding:0 18px 16px;">
+          <button class="cta" style="flex:1;padding:12px;font-size:10px;" onclick="window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190','_blank')">ESCUCHAR</button>
+          <button class="cta-outline" style="flex:1;padding:12px;font-size:10px;" onclick="go(10)">RESPONDER</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s10">
+  <div class="bg-noise"></div><div class="orb oa" style="opacity:0.08;"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(9)">← Atrás</button>
+    <span style="font-size:9px;font-weight:900;letter-spacing:2px;color:var(--g);margin-left:auto;border:1px solid rgba(30,215,96,0.25);padding:4px 8px;">✦ ENVIADO CON ENVIFY</span>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:460px;width:100%;">
+      <div style="border:1px solid rgba(30,215,96,0.15);background:rgba(30,215,96,0.02);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;">
+        <div style="padding:12px 18px;background:rgba(30,215,96,0.04);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;">
+          <div style="width:30px;height:30px;border-radius:50%;background:rgba(30,215,96,0.15);border:1px solid rgba(30,215,96,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;">💬</div>
+          <div><div style="font-size:12px;font-weight:700;color:#fff;">ENVIFY Chat</div><div style="font-size:10px;color:var(--g);font-weight:700;">ENVIFY IA</div></div>
+        </div>
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg them">Recibí tu canción... no sé si reír o llorar, pero gracias.</div>
+          <div class="msg me">Quería que supieras que te admiro, aunque no siempre lo demuestre.</div>
+          <div class="msg them">Eso significa bastante. Nadie me dice esas cosas normalmente.</div>
+        </div>
+        <div class="mod-alert" id="modAlert">
+          <strong>⚠️</strong> Parece que esta conversación podría volverse ofensiva. ¿Quieres reformular tu mensaje?
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="dismissAlert()" style="background:rgba(30,215,96,0.12);border:1px solid rgba(30,215,96,0.3);color:var(--g);font-size:10px;font-weight:900;padding:7px 16px;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;font-family:'Inter',sans-serif;">REFORMULAR</button>
+            <button onclick="sendAnyway()" style="background:transparent;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);font-size:10px;font-weight:700;padding:7px 14px;cursor:pointer;font-family:'Inter',sans-serif;">Enviar igual</button>
+          </div>
+        </div>
+        <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.15);">
+          <input class="chat-inp" id="ci" placeholder="Escribe tu respuesta..." />
+          <button class="send-btn" onclick="sendMsg()" aria-label="Enviar"><svg width="14" height="14" viewBox="0 0 24 24" fill="black"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg></button>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <button class="cta" style="padding:14px 32px;" onclick="go(11)">FINALIZAR →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s11">
+  <div class="bg-noise"></div><div class="orb oa"></div><div class="orb ob"></div><div class="grid"></div>
+  <div class="topbar">
+    <div class="sp-logo"><div class="sp-dot"><svg viewBox="0 0 24 24" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg></div>Spotify</div>
+    <button class="back-btn show" onclick="go(1)">← INICIO</button>
+  </div>
+  <div class="s-inner" style="padding:80px 32px 40px;align-items:center;justify-content:center;">
+    <div style="max-width:440px;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;">
+      <div class="eyebrow" style="margin-bottom:16px;">Misión cumplida</div>
+      <div class="badge-ring">🏆</div>
+      <p style="font-size:9px;font-weight:900;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:16px;border:1px solid rgba(30,215,96,0.25);padding:5px 14px;display:inline-block;">Embajador ENVIFY</p>
+      <h2 style="font-size:clamp(28px,6vw,48px);font-weight:900;line-height:0.9;letter-spacing:-2px;color:#fff;margin-bottom:10px;">Convertiste una<br>emoción difícil<br><span style="color:var(--g);font-style:italic;">en música.</span></h2>
+      <p style="font-size:14px;color:var(--gy);margin-bottom:24px;font-style:italic;">Porque la envidia también merece una playlist.</p>
+      <div style="width:100%;background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.15);padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <div style="width:38px;height:38px;background:rgba(30,215,96,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">💚</div>
+        <div style="flex:1;text-align:left;"><div style="font-size:13px;font-weight:700;color:#fff;">Verde de Envidia</div><div style="font-size:11px;color:var(--gy);">24 canciones · ENVIFY</div></div>
+        <button class="play-btn" style="width:30px;height:30px;flex-shrink:0;" aria-label="Reproducir"><svg width="12" height="12" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg></button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+        <button class="cta" style="padding:16px 28px;" onclick="go(1)">VOLVER A SPOTIFY</button>
+        <button class="cta-outline" style="padding:14px 24px;" onclick="go(2)">NUEVA CONFESIÓN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// ENVIFY — script único, limpio, sin wrappers
+// ═══════════════════════════════════════════════════════════
+
+// ── Datos del usuario acumulados ────────────────────────────
+const USER = { confession:'', answer:'', envyType:'todo lo anterior' };
+window._dedicatedSong = { title:'Devuélveme a mi chica', artist:'Hombres G', sp:'1Wrzhfa5bNlqvsnCztz190', dur:'3:42' };
+window._aiResult = null;   // análisis IA completo reutilizado en s6
+
+// ── Navegación ───────────────────────────────────────────────
+const SCREENS = ['s1','s2','sload','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+function go(id) {
+  SCREENS.forEach(s => { const e = document.getElementById(s); if(e) e.classList.remove('active'); });
+
+  if (id === 'load') {
+    document.getElementById('sload').classList.add('active');
+    scrollTop();
+    setTimeout(() => showScreen(3), 2600);
+    return;
+  }
+  showScreen(id);
+}
+
+function showScreen(id) {
+  SCREENS.forEach(s => { const e = document.getElementById(s); if(e) e.classList.remove('active'); });
+  const el = document.getElementById('s' + id);
+  if (el) el.classList.add('active');
+
+  // Acciones por pantalla
+  if (id === 3) onS3Enter();
+  if (id === 5) onS5Enter();
+  if (id === 6) onS6Enter();
+  if (id === 7) onS7Enter();
+
+  scrollTop();
+}
+
+function scrollTop() {
+  const r = document.getElementById('er');
+  if (r) r.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ── Contador de caracteres s2 ────────────────────────────────
+const ta   = document.getElementById('confession');
+const ccEl = document.getElementById('cc');
+if (ta) ta.addEventListener('input', function() {
+  USER.confession = this.value;
+  if (ccEl) ccEl.textContent = this.value.length + ' / 280';
+});
+
+// ── s4: seleccionar opción de envidia ───────────────────────
+function selOpt(el) {
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  USER.envyType = el.textContent.trim();
+}
+
+// ═══════════════════════════════════════════════════════════
+// LLAMADA CENTRAL A IA (Claude API)
+// Hace UNA sola llamada y guarda el resultado completo
+// para reutilizarlo en s5 (análisis) y s6 (playlist)
+// ═══════════════════════════════════════════════════════════
+async function callAI() {
+  USER.confession = (document.getElementById('confession') || {}).value || USER.confession || '';
+  USER.answer     = (document.getElementById('s3answer')   || {}).value || USER.answer     || '';
+
+  const prompt = `Eres ENVIFY, una IA mediadora emocional con mucho criterio y algo de humor. Analiza esta situación de envidia:
+
+CONFESIÓN DEL USUARIO: "${USER.confession}"
+LO QUE LE DIRÍA A ESA PERSONA: "${USER.answer}"
+LO QUE ENVIDIA ESPECÍFICAMENTE: "${USER.envyType}"
+
+Tu tarea es generar un análisis profundo Y una playlist. Responde ÚNICAMENTE con este JSON (sin markdown, sin texto extra):
+
+{
+  "analisis": {
+    "e1": { "label": "Admiración", "pct": 60 },
+    "e2": { "label": "Inseguridad", "pct": 25 },
+    "e3": { "label": "Frustración", "pct": 15 },
+    "quote": "Una reflexión honesta, empática y con algo de humor sobre lo que hay detrás de esta envidia. Máx 2 oraciones. En segunda persona, hablándole al usuario.",
+    "cancion_titulo": "Título de la canción para dedicar",
+    "cancion_artista": "Artista de la canción para dedicar",
+    "cancion_razon": "Por qué esta canción encaja perfectamente con su situación"
+  },
+  "playlist": [
+    { "t": "título exacto", "a": "artista exacto", "sp": "ID_de_spotify_sin_URL", "dur": "M:SS", "r": "razón breve en español" },
+    { "t": "título exacto", "a": "artista exacto", "sp": "ID_de_spotify_sin_URL", "dur": "M:SS", "r": "razón breve en español" },
+    { "t": "título exacto", "a": "artista exacto", "sp": "ID_de_spotify_sin_URL", "dur": "M:SS", "r": "razón breve en español" }
+  ]
+}
+
+Reglas:
+- Los 3 porcentajes deben sumar 100
+- Los labels pueden ser cualquier emoción apropiada al caso (Admiración, Celos, Nostalgia, Rabia, Deseo, Orgullo herido, etc.)
+- Las canciones deben ser REALES, muy conocidas, que existan en Spotify, directamente relacionadas con lo que confesó el usuario
+- El ID de Spotify: búscalo mentalmente. Ejemplos conocidos: Flowers-MileyCyrus=7qEHsqek33183Trclv0Kiz, Happier Than Ever-Billie=5GJpHkbmasI, good4u-Olivia=4ZtFanR9U6ndgddUvNcjcG
+- Si no tienes certeza del ID de Spotify, usa el nombre del artista y la canción para construir: "search" como sp value
+- IMPORTANTE: Siempre incluye estas 3 canciones en la playlist en este orden: 1) Devuélveme a mi chica de Hombres G (sp: 1Wrzhfa5bNlqvsnCztz190), 2) good 4 u de Olivia Rodrigo (sp: 4ZtFanR9U6ndgddUvNcjcG), 3) Rosa Pastel de Belanova (sp: 3mU0DbuWtUX5KCaovOQZVK). Personaliza solo el campo "r" (razón) según la historia del usuario`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  const raw  = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+  const json = raw.replace(/```json|```/g, '').trim();
+  return JSON.parse(json);
+}
+
+// Fallback si la API falla
+function fallbackResult() {
+  return {
+    analisis: {
+      e1: { label:'Admiración', pct:65 },
+      e2: { label:'Inseguridad', pct:20 },
+      e3: { label:'Frustración', pct:15 },
+      quote: 'Lo que sientes tiene más de admiración que de envidia. Básicamente eres un fan que todavía no se animó a pedir el autógrafo.',
+      cancion_titulo: 'Devuélveme a mi chica',
+      cancion_artista: 'Hombres G',
+      cancion_razon: 'Porque a veces la envidia es solo el nombre bonito que le ponemos al amor que no supimos pedir.'
+    },
+    playlist: [
+      { t:'Devuélveme a mi chica', a:'Hombres G',      sp:'1Wrzhfa5bNlqvsnCztz190', dur:'3:42', r:'Porque a veces la envidia es solo el amor que no supimos pedir' },
+      { t:'good 4 u',             a:'Olivia Rodrigo',  sp:'4ZtFanR9U6ndgddUvNcjcG', dur:'2:58', r:'Para procesar el drama con toda la intensidad que merece' },
+      { t:'Rosa Pastel',          a:'Belanova',         sp:'3mU0DbuWtUX5KCaovOQZVK', dur:'4:07', r:'Para cuando la envidia se parece demasiado a querer lo imposible' }
+    ]
+  };
+}
+
+// ── s3: la IA ya leyó la confesión → mostrar reacción dinámica ──
+function onS3Enter() {
+  USER.confession = (document.getElementById('confession') || {}).value || USER.confession;
+  // Opcional: actualizar el copy del mediador según la confesión
+  // (se deja el copy estático por ahora, es suficientemente genérico)
+}
+
+// ═══════════════════════════════════════════════════════════
+// s5: ANÁLISIS IA
+// ═══════════════════════════════════════════════════════════
+async function onS5Enter() {
+  USER.confession = (document.getElementById('confession') || {}).value || USER.confession;
+  USER.answer     = (document.getElementById('s3answer')   || {}).value || USER.answer;
+
+  const loadEl    = document.getElementById('s5Loading');
+  const contentEl = document.getElementById('s5Content');
+  const bigPct    = document.getElementById('s5BigPct');
+  if (loadEl)    { loadEl.style.display = 'block'; }
+  if (contentEl) { contentEl.style.display = 'none'; }
+  if (bigPct)    { bigPct.textContent = '...'; }
+
+  let result;
+  try {
+    result = await callAI();
+    window._aiResult = result;  // guardar para s6
+  } catch(e) {
+    result = fallbackResult();
+    window._aiResult = result;
+  }
+
+  const A = result.analisis;
+
+  // Poblar barras
+  const rows = [
+    { l:'s5L1', p:'s5P1', b:'b1', obj:A.e1 },
+    { l:'s5L2', p:'s5P2', b:'b2', obj:A.e2 },
+    { l:'s5L3', p:'s5P3', b:'b3', obj:A.e3 }
+  ];
+  rows.forEach((r, i) => {
+    setTimeout(() => {
+      const lEl = document.getElementById(r.l);
+      const pEl = document.getElementById(r.p);
+      const bEl = document.getElementById(r.b);
+      if (lEl) lEl.textContent = r.obj.label;
+      if (pEl) pEl.textContent = r.obj.pct + '%';
+      if (bEl) bEl.style.width = r.obj.pct + '%';
+      if (i === 0 && bigPct) bigPct.textContent = r.obj.pct + '%';
+    }, i * 300);
+  });
+
+  const quoteEl = document.getElementById('s5Quote');
+  if (quoteEl) quoteEl.textContent = '"' + A.quote + '"';
+
+  if (loadEl)    loadEl.style.display = 'none';
+  if (contentEl) { contentEl.style.display = 'block'; }
+}
+
+// ═══════════════════════════════════════════════════════════
+// s6: PLAYLIST desde resultado IA
+// ═══════════════════════════════════════════════════════════
+async function onS6Enter() {
+  const loadEl   = document.getElementById('s6Loading');
+  const listEl   = document.getElementById('s6TrackList');
+  const staticEl = document.getElementById('s6StaticTracks');
+  const infoEl   = document.getElementById('s6TrackInfo');
+
+  if (staticEl) staticEl.style.display = 'none';
+  if (listEl)   listEl.style.display   = 'none';
+  if (loadEl)   loadEl.style.display   = 'block';
+
+  let result = window._aiResult;
+
+  // Si no hay resultado previo (llegaron directo a s6), llamar IA
+  if (!result) {
+    USER.confession = (document.getElementById('confession') || {}).value || USER.confession;
+    USER.answer     = (document.getElementById('s3answer')   || {}).value || USER.answer;
+    try {
+      result = await callAI();
+      window._aiResult = result;
+    } catch(e) {
+      result = fallbackResult();
+      window._aiResult = result;
+    }
+  }
+
+  const songs = result.playlist || [];
+
+  // Guardar canción dedicatoria (primera de la playlist o la del análisis)
+  const A = result.analisis || {};
+  window._dedicatedSong = {
+    title:  A.cancion_titulo  || (songs[0] && songs[0].t) || 'The Climb',
+    artist: A.cancion_artista || (songs[0] && songs[0].a) || 'Miley Cyrus',
+    sp:     (songs[0] && songs[0].sp) || '3KkXRkHbMCARz0aVfEt68P',
+    dur:    (songs[0] && songs[0].dur) || '3:30',
+    razon:  A.cancion_razon   || ''
+  };
+
+  // Renderizar tracks con botón Spotify
+  if (listEl) {
+    listEl.innerHTML = songs.map((s, i) => {
+      const spId  = (s.sp && s.sp !== 'search') ? s.sp : null;
+      const spUrl = spId
+        ? 'https://open.spotify.com/track/' + spId
+        : 'https://open.spotify.com/search/' + encodeURIComponent((s.t||'') + ' ' + (s.a||''));
+      return '<div class="track" style="' + (i === songs.length-1 ? 'border-bottom:none;' : '') + '">'
+        + '<span style="font-size:12px;color:var(--gy);width:20px;text-align:center;flex-shrink:0;">' + (i+1) + '</span>'
+        + '<div class="track-art">🎵</div>'
+        + '<div style="flex:1;min-width:0;">'
+        +   '<div style="font-size:13px;font-weight:700;color:#fff;">' + (s.t||'—') + '</div>'
+        +   '<div style="font-size:11px;color:var(--gy);">' + (s.a||'—') + '</div>'
+        +   (s.r ? '<div style="font-size:10px;color:rgba(30,215,96,0.65);font-style:italic;margin-top:2px;">' + s.r + '</div>' : '')
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">'
+        +   '<span style="font-size:12px;color:var(--gy);">' + (s.dur||'—') + '</span>'
+        +   '<a href="' + spUrl + '" target="_blank" style="width:28px;height:28px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;" title="Abrir en Spotify">'
+        +     '<svg viewBox="0 0 24 24" width="14" height="14" fill="black"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.517.78.78 0 01.517-.972c3.632-1.102 8.147-.568 11.236 1.326a.78.78 0 01.257 1.072zm.105-2.835c-3.223-1.914-8.54-2.09-11.618-1.156a.936.936 0 11-.543-1.79c3.533-1.072 9.404-.865 13.115 1.338a.936.936 0 01-.954 1.608z"/></svg>'
+        +   '</a>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+    listEl.style.display = 'block';
+  }
+
+  // Botón play principal abre Spotify de la primera canción
+  const s0    = songs[0] || {};
+  const s0url = (s0.sp && s0.sp !== 'search')
+    ? 'https://open.spotify.com/track/' + s0.sp
+    : 'https://open.spotify.com/search/' + encodeURIComponent((s0.t||'') + ' ' + (s0.a||''));
+  const playBtn = document.getElementById('s6PlayBtn');
+  if (playBtn) playBtn.onclick = () => window.open(s0url, '_blank');
+
+  const nameEl = document.getElementById('s6TrackName');
+  if (nameEl) nameEl.textContent = (s0.t||'—') + ' · ' + (s0.a||'—');
+  const waveEl = document.getElementById('s6Wave');
+  if (waveEl) waveEl.style.display = 'flex';
+  if (infoEl) infoEl.style.display = 'flex';
+  if (loadEl) loadEl.style.display = 'none';
+}
+
+function s6TogglePlay() {
+  const song = window._dedicatedSong || {};
+  const url  = song.sp
+    ? 'https://open.spotify.com/track/' + song.sp
+    : 'https://open.spotify.com/search/' + encodeURIComponent((song.title||'') + ' ' + (song.artist||''));
+  window.open(url, '_blank');
+}
+
+// ═══════════════════════════════════════════════════════════
+// s7: canción dedicatoria
+// ═══════════════════════════════════════════════════════════
+function onS7Enter() {
+  const song  = window._dedicatedSong || { title:'The Climb', artist:'Miley Cyrus', sp:'3KkXRkHbMCARz0aVfEt68P', dur:'3:56', razon:'' };
+  const A     = (window._aiResult && window._aiResult.analisis) || {};
+
+  // Título y artista en pantalla
+  const tEl = document.querySelector('#s7 p[style*="font-size:22px"]');
+  const aEl = document.querySelector('#s7 p[style*="font-size:13px"][style*="color:var(--gy)"]');
+  if (tEl) tEl.textContent  = A.cancion_titulo  || song.title;
+  if (aEl) aEl.textContent  = A.cancion_artista || song.artist;
+
+  // Razón de la canción
+  const razonEl = document.querySelector('#s7 p[style*="font-style:italic"][style*="color:rgba(255,255,255,0.75)"]');
+  if (razonEl && A.cancion_razon) razonEl.textContent = A.cancion_razon;
+
+  // Player label
+  const label = document.getElementById('s7TrackLabel');
+  const durEl = document.getElementById('s7Dur');
+  if (label) label.textContent = (A.cancion_titulo || song.title) + ' · ' + (A.cancion_artista || song.artist);
+  if (durEl) durEl.textContent  = song.dur || '—';
+
+  // Parar audio de s6 si venía
+  const f6 = document.getElementById('s6Frame');
+  if (f6) f6.src = 'about:blank';
+}
+
+function s7TogglePlay() {
+  // Siempre abre Devuélveme a mi chica en Spotify
+  window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190', '_blank');
+}
+
+// ═══════════════════════════════════════════════════════════
+// s10: CHAT — alerta SIEMPRE al enviar
+// ═══════════════════════════════════════════════════════════
+let _pendingMsg = '';
+
+function sendMsg() {
+  const inp  = document.getElementById('ci');
+  const text = (inp.value || '').trim();
+  if (!text) return;
+  _pendingMsg  = text;
+  inp.value    = '';
+  document.getElementById('modAlert').classList.add('show');
+}
+
+function dismissAlert() {
+  _pendingMsg = '';
+  document.getElementById('modAlert').classList.remove('show');
+  const inp = document.getElementById('ci');
+  if (inp) inp.focus();
+}
+
+function sendAnyway() {
+  const text = _pendingMsg;
+  _pendingMsg = '';
+  document.getElementById('modAlert').classList.remove('show');
+  if (text) {
+    appendMsg(text, 'me');
+    setTimeout(() => {
+      const replies = [
+        'Wow, no esperaba eso.',
+        'Gracias por ser tan honesto/a.',
+        'Necesito procesar esto también.',
+        'Oye, aprecio que me lo hayas dicho.',
+        'No sabía que sentías eso.'
+      ];
+      appendMsg(replies[Math.floor(Math.random() * replies.length)], 'them');
+    }, 1100);
+  }
+}
+
+function appendMsg(text, cls) {
+  const msgs = document.getElementById('chatMsgs');
+  if (!msgs) return;
+  const m       = document.createElement('div');
+  m.className   = 'msg ' + cls;
+  m.textContent = text;
+  msgs.appendChild(m);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+const ci = document.getElementById('ci');
+if (ci) ci.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+</script>
