@@ -132,9 +132,9 @@
   <!-- Capa fondo -->
   <div style="position:absolute;inset:0;z-index:0;background-image:url('fondo_banner.png');background-size:cover;background-position:center;"></div>
   <!-- Overlay degradado -->
-  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(0,0,0,0.93) 0%,rgba(0,0,0,0.7) 48%,rgba(0,0,0,0.05) 100%);"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(0,0,0,0.93) 0%,rgba(0,0,0,0.7) 38%,rgba(0,0,0,0.05) 100%);"></div>
   <!-- Foto chica derecha -->
-  <div style="position:absolute;right:0;top:0;bottom:0;width:50%;z-index:2;overflow:hidden;">
+  <div style="position:absolute;right:0;top:0;bottom:0;width:min(58%,1200px);z-index:2;overflow:hidden;">
     <img src="chica.png" style="width:100%;height:100%;object-fit:cover;object-position:center top;mix-blend-mode:multiply;" />
     <div style="position:absolute;inset:0;background:linear-gradient(to right,#000 0%,transparent 35%);pointer-events:none;"></div>
   </div>
@@ -154,7 +154,7 @@
     </div>
 
     <!-- Zona de texto centrada -->
-    <div style="flex:1;display:flex;align-items:center;max-width:520px;margin-left:clamp(0px,4vw,60px);">
+    <div style="flex:1;display:flex;align-items:center;max-width:600px;margin-left:clamp(0px,6vw,120px);">
       <div style="width:100%;">
 
         <div style="font-size:clamp(36px,6.5vw,80px);font-weight:900;line-height:0.95;letter-spacing:-1px;color:#fff;margin-bottom:6px;">
