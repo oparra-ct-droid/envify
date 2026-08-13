@@ -373,18 +373,18 @@
       <div class="eyebrow" style="margin-bottom:12px;text-align:center;">Tu soundtrack</div>
       <h2 style="font-size:clamp(26px,5vw,40px);font-weight:900;line-height:0.9;letter-spacing:-2px;text-align:center;margin-bottom:20px;">Tu emoción ya<br><span style="color:var(--g);font-style:italic;">tiene canción.</span></h2>
       <div style="width:170px;height:170px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:18px;">🎭</div>
-      <p style="font-size:22px;font-weight:900;text-align:center;margin-bottom:4px;letter-spacing:-0.5px;">Devuélveme a mi chica</p>
-      <p style="font-size:13px;color:var(--gy);text-align:center;margin-bottom:16px;">Hombres G</p>
+      <p style="font-size:22px;font-weight:900;text-align:center;margin-bottom:4px;letter-spacing:-0.5px;">China Hp</p>
+      <p style="font-size:13px;color:var(--gy);text-align:center;margin-bottom:16px;">K93</p>
       <div style="border-left:2px solid var(--g);padding:12px 18px;background:rgba(30,215,96,0.04);max-width:380px;text-align:center;margin-bottom:20px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
-        <p style="font-size:14px;font-style:italic;color:rgba(255,255,255,0.75);line-height:1.6;">Porque a veces la envidia es solo el nombre bonito que le ponemos al amor que no supimos pedir.</p>
+        <p style="font-size:14px;font-style:italic;color:rgba(255,255,255,0.75);line-height:1.6;">Porque a veces la rabia solo necesita ritmo antes que palabras, y esta canción te lo da servido.</p>
       </div>
       <div style="width:100%;max-width:380px;background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.15);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-        <button class="play-btn" id="s7PlayBtn" onclick="window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190','_blank')" aria-label="Reproducir en Spotify">
+        <button class="play-btn" id="s7PlayBtn" onclick="window.open('https://open.spotify.com/search/China%20Hp%20K93','_blank')" aria-label="Reproducir en Spotify">
           <svg id="s7PlayIco" width="15" height="15" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
           <svg id="s7PauseIco" width="15" height="15" viewBox="0 0 24 24" fill="black" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <div style="flex:1;"><div id="s7TrackLabel" style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px;">Devuélveme a mi chica · Hombres G</div><div style="width:100%;height:2px;background:rgba(255,255,255,0.1);"><div id="s7Prog" style="width:0%;height:100%;background:var(--g);transition:width 0.5s;"></div></div></div>
-        <span id="s7Dur" style="font-size:11px;color:var(--gy);">3:42</span>
+        <div style="flex:1;"><div id="s7TrackLabel" style="font-size:12px;font-weight:700;color:#fff;margin-bottom:5px;">China Hp · K93</div><div style="width:100%;height:2px;background:rgba(255,255,255,0.1);"><div id="s7Prog" style="width:0%;height:100%;background:var(--g);transition:width 0.5s;"></div></div></div>
+        <span id="s7Dur" style="font-size:11px;color:var(--gy);">—</span>
       </div>
       <iframe id="s7Frame" width="1" height="1" frameborder="0" allow="autoplay" style="position:fixed;bottom:-100px;opacity:0;pointer-events:none;" src="about:blank"></iframe>
       <button class="cta" style="padding:16px 36px;" onclick="go(8)">COMPARTIRLA →</button>
@@ -442,11 +442,11 @@
         <div style="padding:0 18px 14px;">
           <div style="background:rgba(30,215,96,0.05);border:1px solid rgba(30,215,96,0.12);padding:12px;display:flex;align-items:center;gap:10px;">
             <div style="width:38px;height:38px;background:rgba(30,215,96,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🎭</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Devuélveme a mi chica</div><div style="font-size:11px;color:var(--gy);">Hombres G · via ENVIFY</div></div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">China Hp</div><div style="font-size:11px;color:var(--gy);">K93 · via ENVIFY</div></div>
           </div>
         </div>
         <div style="display:flex;gap:8px;padding:0 18px 16px;">
-          <button class="cta" style="flex:1;padding:12px;font-size:10px;" onclick="window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190','_blank')">ESCUCHAR</button>
+          <button class="cta" style="flex:1;padding:12px;font-size:10px;" onclick="window.open('https://open.spotify.com/search/China%20Hp%20K93','_blank')">ESCUCHAR</button>
           <button class="cta-outline" style="flex:1;padding:12px;font-size:10px;" onclick="go(10)">RESPONDER</button>
         </div>
       </div>
@@ -527,7 +527,7 @@
 
 // ── Datos del usuario acumulados ────────────────────────────
 const USER = { confession:'', answer:'', envyType:'todo lo anterior' };
-window._dedicatedSong = { title:'Devuélveme a mi chica', artist:'Hombres G', sp:'1Wrzhfa5bNlqvsnCztz190', dur:'3:42' };
+window._dedicatedSong = { title:'China Hp', artist:'K93', sp:'search', dur:'' };
 window._aiResult = null;   // análisis IA completo reutilizado en s6
 
 // ── Navegación ───────────────────────────────────────────────
@@ -608,14 +608,14 @@ function fallbackResult() {
       e2: { label:'Rabia', pct:20 },
       e3: { label:'Tristeza', pct:15 },
       quote: 'Lo que sientes es más frustración que envidia: te duele no estar donde crees que deberías estar. Y si hay algo de rabia y tristeza ahí, es porque en el fondo sí te importa.',
-      cancion_titulo: 'Devuélveme a mi chica',
-      cancion_artista: 'Hombres G',
-      cancion_razon: 'Porque a veces la envidia es solo el nombre bonito que le ponemos al amor que no supimos pedir.'
+      cancion_titulo: 'China Hp',
+      cancion_artista: 'K93',
+      cancion_razon: 'Porque a veces la rabia solo necesita ritmo antes que palabras, y esta canción te lo da servido.'
     },
     playlist: [
-      { t:'Devuélveme a mi chica', a:'Hombres G',      sp:'1Wrzhfa5bNlqvsnCztz190', dur:'3:42', r:'Porque a veces la envidia es solo el amor que no supimos pedir' },
-      { t:'good 4 u',             a:'Olivia Rodrigo',  sp:'4ZtFanR9U6ndgddUvNcjcG', dur:'2:58', r:'Para procesar el drama con toda la intensidad que merece' },
-      { t:'Rosa Pastel',          a:'Belanova',         sp:'3mU0DbuWtUX5KCaovOQZVK', dur:'4:07', r:'Para cuando la envidia se parece demasiado a querer lo imposible' }
+      { t:'China Hp',              a:'K93',                                    sp:'search', dur:'', r:'Para cuando la rabia necesita ritmo antes que palabras' },
+      { t:'Abarájame la Bañera',   a:'Illya Kuryaki and The Valderramas',      sp:'search', dur:'', r:'Porque hasta la frustración se baila si el groove es bueno' },
+      { t:'El Triste',             a:'José José',                              sp:'search', dur:'', r:'Para la tristeza que no se puede fingir' }
     ]
   };
 }
@@ -796,8 +796,8 @@ function onS7Enter() {
 }
 
 function s7TogglePlay() {
-  // Siempre abre Devuélveme a mi chica en Spotify
-  window.open('https://open.spotify.com/intl-es/track/1Wrzhfa5bNlqvsnCztz190', '_blank');
+  // Siempre abre China Hp en Spotify
+  window.open('https://open.spotify.com/search/China%20Hp%20K93', '_blank');
 }
 
 // ═══════════════════════════════════════════════════════════

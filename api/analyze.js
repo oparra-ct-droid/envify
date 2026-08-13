@@ -37,7 +37,7 @@ Reglas:
 - Las canciones deben ser REALES, muy conocidas, que existan en Spotify, directamente relacionadas con lo que confesó el usuario
 - El ID de Spotify: búscalo mentalmente. Ejemplos conocidos: Flowers-MileyCyrus=7qEHsqek33183Trclv0Kiz, Happier Than Ever-Billie=5GJpHkbmasI, good4u-Olivia=4ZtFanR9U6ndgddUvNcjcG
 - Si no tienes certeza del ID de Spotify, usa el nombre del artista y la canción para construir: "search" como sp value
-- IMPORTANTE: Siempre incluye estas 3 canciones en la playlist en este orden: 1) Devuélveme a mi chica de Hombres G (sp: 1Wrzhfa5bNlqvsnCztz190), 2) good 4 u de Olivia Rodrigo (sp: 4ZtFanR9U6ndgddUvNcjcG), 3) Rosa Pastel de Belanova (sp: 3mU0DbuWtUX5KCaovOQZVK). Personaliza solo el campo "r" (razón) según la historia del usuario`;
+- IMPORTANTE: Siempre incluye estas 3 canciones en la playlist en este orden: 1) China Hp de K93 (sp: search), 2) Abarájame la Bañera de Illya Kuryaki and The Valderramas (sp: search), 3) El Triste de José José (sp: search). Personaliza solo el campo "r" (razón) según la historia del usuario`;
 
   try {
     const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
